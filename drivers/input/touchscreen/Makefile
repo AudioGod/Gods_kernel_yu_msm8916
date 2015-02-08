@@ -85,8 +85,10 @@ obj-$(CONFIG_TOUCHSCREEN_GSL1688E)  += gsl_ts_driver.o gsl_ReadArrayData.o gsl_p
 obj-$(CONFIG_TOUCHSCREEN_GSL1688E_ARM64) += gsl_ts_driver.o gsl_ReadArrayData.o gsl_point_id_arm64.o
 
 obj-$(CONFIG_TOUCHSCREEN_GT9XX)		+= gt9xx/
+obj-y += touchboost.o
 obj-$(CONFIG_TOUCHSCREEN_BU21150)	+= bu21150.o
 obj-$(CONFIG_INPUT_MT_WRAPPER)		+= input_mt_wrapper.o
 obj-$(CONFIG_TOUCHSCREEN_YL_GT9XX)	+= gt9xx_yl/
 obj-$(CONFIG_TOUCHSCREEN_WT_GT9XX)	+= gt9xx_wt/
 obj-$(CONFIG_MACH_YULONG)		+= touchscreen_yl.o
+
