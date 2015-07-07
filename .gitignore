@@ -32,7 +32,8 @@ modules.builtin
 *.lzo
 *.patch
 *.gcno
-
+build_tomato.sh
+dtbToolCM
 #
 # Top-level generic files
 #
