@@ -53,8 +53,8 @@
 #include <linux/msm-bus.h>
 
 #ifdef CONFIG_FORCE_FAST_CHARGE
+#define USB_FASTCHG_LOAD 900 /* uA */
 #include <linux/fastchg.h>
-#define USB_FASTCHG_LOAD 1000 /* uA */
 #endif
 
 #define MSM_USB_BASE	(motg->regs)
@@ -1886,26 +1886,19 @@ static void msm_otg_notify_charger(struct msm_otg *motg, unsigned mA)
 			pr_info("Available current already greater than USB fastcharging current!!!\n");
 			pr_info("Override of USB charging current cancelled.\n");
 		}
-		else if(usb_fast_charge_level <= USB_FASTCHG_LOAD) {				
+		else {				
 			mA = usb_fast_charge_level;
 			pr_info("USB fast charging is ON!!!\n");
 		}
-		else if(usb_fast_charge_level > USB_FASTCHG_LOAD){
-		    mA = USB_FASTCHG_LOAD;
-		    pr_info("You set fast charge level to high !! \n");
-		    pr_info("Setting it to maximum limit of 1000 mA!! \n");
-		    pr_info("USB fast charging is ON!!!\n");
-		}
-	//pr_info("force fast charge = %d", force_fast_charge);
 	dev_info(motg->phy.dev, "Avail curr from USB = %u\n", mA);
 	} 
 
 	else if(force_fast_charge == 0){
-    dev_info(motg->phy.dev, "Avail curr from USB = %u\n", mA);
+	dev_info(motg->phy.dev, "Avail curr from USB = %u\n", mA);
 	pr_info("USB fast charging is OFF.\n");
 	}
 #else
-    dev_info(motg->phy.dev, "Avail curr from USB = %u\n", mA);
+	dev_info(motg->phy.dev, "Avail curr from USB = %u\n", mA);
 #endif
 
 	/*

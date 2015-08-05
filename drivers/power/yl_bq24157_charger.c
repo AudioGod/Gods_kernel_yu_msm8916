@@ -32,6 +32,7 @@
 #include "yl_pm8916_vbus.h"
 
 #ifdef CONFIG_FORCE_FAST_CHARGE
+#define IVBUS_FASTCHG_WARN 1250 /* uA */
 #include <linux/fastchg.h>
 #endif
 
@@ -1342,19 +1343,23 @@ static void bq24157_external_power_changed(struct power_supply *psy)
 	else
 	{
 #ifdef CONFIG_FORCE_FAST_CHARGE
-        if(force_fast_charge == 1 || force_fast_charge == 2){
-		    chip->set_ivbus_max = fast_charge_level;
-		    pr_info("force fast charge = %d", force_fast_charge);
-		    pr_info("Fast charging is ON!!!\n");
-		   }
-		else if(force_fast_charge == 0){
-		    pr_info("force fast charge = %d", force_fast_charge);
-		    chip->set_ivbus_max = prop.intval / 1000;
-		    pr_info("Fast charging is OFF!!!\n");
-		   }
-        pr_info("Using fast charge level of %d",fast_charge_level);
+	if (force_fast_charge == 1 || force_fast_charge == 2){
+		if (fast_charge_level <= IVBUS_FASTCHG_WARN){
+				chip->set_ivbus_max = fast_charge_level;
+				pr_info("Fast charging is ON!!!\n");
+		}
+		else if(fast_charge_level > IVBUS_FASTCHG_WARN){// Warn user about exceeding limit
+				chip->set_ivbus_max = fast_charge_level;
+				pr_info("Warning: You exceeded the warning charge level!! \n");
+				pr_info("Fast charging is ON!!!\n");
+	   	}
+	}
+	else if(force_fast_charge == 0){
+		chip->set_ivbus_max = prop.intval / 1000;
+		pr_info("Fast charging is OFF!!!\n");
+	}
 #else
-        chip->set_ivbus_max = prop.intval / 1000;
+    chip->set_ivbus_max = prop.intval / 1000;
 #endif
 	}
 
